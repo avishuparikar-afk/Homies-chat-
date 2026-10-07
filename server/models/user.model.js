@@ -32,7 +32,7 @@ const userSchema = new mongoose.Schema(
     },
     bio: {
       type: String,
-      default: 'Hey there! I am using Real-Time Chat.',
+      default: 'Hey there! I am using Homies Chat.',
       maxlength: [120, 'Bio cannot exceed 120 characters']
     },
     online: {

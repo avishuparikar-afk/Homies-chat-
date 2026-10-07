@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const lastSeenText = window.DateFormatter.formatLastSeen(user.lastSeen, isOnline);
     const avatarDisplay = escapeHtml(user.profileImage || '👤');
     const safeUsername = escapeHtml(user.username || '');
-    const safeBio = escapeHtml(user.bio || 'Hey there! I am using Real-Time Chat.');
+    const safeBio = escapeHtml(user.bio || 'Hey there! I am using Homies Chat.');
 
     return `
       <div class="user-item-card" data-user-id="${user._id}">
