@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
         authStatusBadge.innerHTML = '<span class="status-indicator-dot"></span> Authenticated';
         profileUsername.textContent = `@${data.user.username}`;
         profileEmail.textContent = data.user.email;
-        profileBio.textContent = data.user.bio || 'Hey there! I am using Real-Time Chat.';
+        profileBio.textContent = data.user.bio || 'Hey there! I am using Homies Chat.';
         if (profileAvatar) profileAvatar.textContent = data.user.profileImage || '👤';
 
         unauthView.style.display = 'none';

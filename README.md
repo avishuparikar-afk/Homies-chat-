@@ -156,5 +156,23 @@ docker run -d -p 5000:5000 --env-file .env homies-chat:latest
 
 ---
 
+## ▲ Vercel Deployment Guide
+
+This project includes a ready-to-use [`vercel.json`](file:///c:/Users/pk170/Documents/project/vercel.json) configuration for deploying the frontend on **Vercel** directly through GitHub:
+
+### Step 1: Import GitHub Repository to Vercel
+1. Log in to [vercel.com](https://vercel.com) and click **"Add New..."** → **"Project"**.
+2. Under **"Import Git Repository"**, select **`Homies-chat-`** (or paste `https://github.com/avishuparikar-afk/Homies-chat-`).
+3. Vercel automatically detects [`vercel.json`](file:///c:/Users/pk170/Documents/project/vercel.json) with output directory configured to `client`.
+4. Click **Deploy**.
+
+### Step 2: Architecture Note for Real-Time Socket.IO
+- **Vercel** provides high-speed global CDN edge hosting for the frontend application.
+- **Socket.IO Real-Time Engine**: WebSockets require a persistent long-lived Node.js process (which serverless platforms freeze).
+- For complete real-time messaging, deploy the backend container (`server/server.js`) on a persistent host such as **Render**, **Railway**, **Fly.io**, or your own VPS/Docker instance.
+- To connect your Vercel frontend to your persistent backend, simply set `HOMIES_BACKEND_URL` in localStorage, or inject `window.__ENV__ = { API_BASE_URL: "https://your-backend.onrender.com" }`.
+
+---
+
 ## 📜 License
 ISC License.

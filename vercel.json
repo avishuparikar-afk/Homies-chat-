@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "outputDirectory": "client",
+  "cleanUrls": true,
+  "rewrites": [
+    {
+      "source": "/auth",
+      "destination": "/auth.html"
+    }
+  ]
+}

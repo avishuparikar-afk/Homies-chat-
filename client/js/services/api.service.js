@@ -146,4 +146,5 @@ class ApiService {
   }
 }
 
-window.apiService = new ApiService();
+const defaultBaseUrl = (typeof CONFIG !== 'undefined' && CONFIG.API_BASE_URL && CONFIG.API_BASE_URL !== window.location.origin) ? CONFIG.API_BASE_URL : '';
+window.apiService = new ApiService(defaultBaseUrl);
