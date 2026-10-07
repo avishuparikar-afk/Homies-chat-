@@ -1,0 +1,142 @@
+/* ==========================================================================
+   Design System Variables & Theming Engine (Dark & Light Mode)
+   Phase 11 Redesign: Modern Chat Application
+   ========================================================================== */
+
+:root,
+:root[data-theme="dark"] {
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* App Layout Surfaces */
+  --bg-app: #090d16;
+  --bg-sidebar: #0f172a;
+  --bg-sidebar-header: #131d31;
+  --bg-chat: #070b13;
+  --bg-chat-header: #0f172a;
+  --bg-input-bar: #0f172a;
+  --bg-card: #1e293b;
+  --bg-card-hover: rgba(51, 65, 85, 0.45);
+  --bg-input: #1e293b;
+  --bg-input-focus: #172033;
+  --bg-modal: #131d31;
+  --bg-modal-header: #0f172a;
+  --bg-dropdown: #131d31;
+
+  /* Message Bubbles */
+  --bubble-sent: #059669;
+  --bubble-sent-text: #ffffff;
+  --bubble-sent-footer: rgba(255, 255, 255, 0.8);
+  --bubble-recv: #1e293b;
+  --bubble-recv-text: #f8fafc;
+  --bubble-recv-footer: #94a3b8;
+  --bubble-recv-border: #334155;
+
+  /* Accent Colors */
+  --accent-color: #10b981;
+  --accent-hover: #059669;
+  --accent-light: rgba(16, 185, 129, 0.15);
+  --accent-glow: rgba(16, 185, 129, 0.25);
+  --accent-alt: #38bdf8;
+  --accent-alt-light: rgba(56, 189, 248, 0.15);
+
+  /* Status Colors */
+  --status-online: #10b981;
+  --status-offline: #64748b;
+  --status-warning: #f59e0b;
+  --status-danger: #ef4444;
+  --status-read-tick: #38bdf8;
+
+  /* Typography */
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+  --text-inverse: #090d16;
+
+  /* Borders & Dividers */
+  --border-color: #1e293b;
+  --border-color-light: rgba(255, 255, 255, 0.07);
+  --border-active: #38bdf8;
+
+  /* Skeletons */
+  --skeleton-base: #1e293b;
+  --skeleton-highlight: #334155;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.4);
+  --shadow-dropdown: 0 12px 28px rgba(0, 0, 0, 0.6);
+
+  /* Geometry & Transitions */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-smooth: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+:root[data-theme="light"] {
+  /* App Layout Surfaces */
+  --bg-app: #f1f5f9;
+  --bg-sidebar: #ffffff;
+  --bg-sidebar-header: #f8fafc;
+  --bg-chat: #f8fafc;
+  --bg-chat-header: #ffffff;
+  --bg-input-bar: #ffffff;
+  --bg-card: #ffffff;
+  --bg-card-hover: rgba(241, 245, 249, 0.85);
+  --bg-input: #f1f5f9;
+  --bg-input-focus: #ffffff;
+  --bg-modal: #ffffff;
+  --bg-modal-header: #f8fafc;
+  --bg-dropdown: #ffffff;
+
+  /* Message Bubbles */
+  --bubble-sent: #059669;
+  --bubble-sent-text: #ffffff;
+  --bubble-sent-footer: rgba(255, 255, 255, 0.85);
+  --bubble-recv: #ffffff;
+  --bubble-recv-text: #0f172a;
+  --bubble-recv-footer: #64748b;
+  --bubble-recv-border: #e2e8f0;
+
+  /* Accent Colors */
+  --accent-color: #059669;
+  --accent-hover: #047857;
+  --accent-light: rgba(5, 150, 105, 0.12);
+  --accent-glow: rgba(5, 150, 105, 0.2);
+  --accent-alt: #0284c7;
+  --accent-alt-light: rgba(2, 132, 199, 0.12);
+
+  /* Status Colors */
+  --status-online: #10b981;
+  --status-offline: #94a3b8;
+  --status-warning: #d97706;
+  --status-danger: #dc2626;
+  --status-read-tick: #0284c7;
+
+  /* Typography */
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --text-dim: #94a3b8;
+  --text-inverse: #ffffff;
+
+  /* Borders & Dividers */
+  --border-color: #e2e8f0;
+  --border-color-light: rgba(0, 0, 0, 0.05);
+  --border-active: #0284c7;
+
+  /* Skeletons */
+  --skeleton-base: #e2e8f0;
+  --skeleton-highlight: #f1f5f9;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+  --shadow-dropdown: 0 12px 28px rgba(0, 0, 0, 0.12);
+}

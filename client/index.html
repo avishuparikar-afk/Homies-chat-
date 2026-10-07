@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Real-Time Chat Application - Phase 11</title>
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/auth.css">
+  <link rel="stylesheet" href="/css/profile.css">
+  <link rel="stylesheet" href="/css/chat.css">
+</head>
+<body>
+  <!-- Fullscreen Desktop & Mobile Application Shell -->
+  <div class="app-shell" id="app-shell">
+    
+    <!-- ====================================================================
+         LEFT SIDEBAR PANE
+         ==================================================================== -->
+    <aside class="app-sidebar" id="app-sidebar">
+      <!-- Top Bar: Current User Profile, Brand & Navigation Icons -->
+      <div class="sidebar-top-bar">
+        <!-- User Profile Pill / Menu Trigger -->
+        <div class="sidebar-user-pill" id="sidebar-user-menu-btn" title="Open Profile & Menu">
+          <div class="avatar-badge-wrap">
+            <div class="user-avatar-sm" id="sidebar-my-avatar">👤</div>
+            <span class="online-indicator-dot" id="sidebar-my-status-dot"></span>
+          </div>
+          <div class="sidebar-user-info">
+            <div class="sidebar-user-name" id="sidebar-my-username">User</div>
+            <div class="sidebar-user-status" id="sidebar-my-status">Online</div>
+          </div>
+        </div>
+
+        <!-- Sidebar Top Action Buttons -->
+        <div class="sidebar-action-btns">
+          <!-- Theme Toggle (Dark / Light) -->
+          <button id="theme-toggle-btn" class="icon-btn" title="Toggle Dark / Light Theme" type="button">
+            <span id="theme-toggle-icon">🌙</span>
+          </button>
+
+          <!-- Global Search Hub -->
+          <button id="global-search-btn" class="icon-btn" title="Search Hub (Messages, Users, Groups)" type="button">
+            <span>🔍</span>
+          </button>
+
+          <!-- Create Group -->
+          <button id="new-group-btn" class="icon-btn" title="Create New Group" type="button">
+            <span>➕</span>
+          </button>
+
+          <!-- Notifications Bell & Dropdown -->
+          <div class="notification-bell-wrapper">
+            <button id="notification-bell-btn" class="icon-btn" title="Notifications" type="button">
+              <span>🔔</span>
+              <span id="notification-unread-badge" class="notification-badge" style="display: none;">0</span>
+            </button>
+
+            <div id="notification-dropdown" class="notification-dropdown" style="display: none;">
+              <div class="notification-header">
+                <span class="notification-title">Notifications</span>
+                <div class="notif-controls">
+                  <button id="notif-sound-toggle-btn" class="notif-sound-btn" title="Toggle sound" type="button">🔊</button>
+                  <button id="notif-mark-all-btn" class="notif-action-btn" type="button">Mark all read</button>
+                </div>
+              </div>
+              <div id="notification-list" class="notification-list">
+                <div class="notification-empty">No notifications yet.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Account & Settings Dropdown Menu -->
+          <div class="profile-menu-wrapper" style="position: relative;">
+            <button id="profile-menu-btn" class="icon-btn" title="Settings & Menu" type="button">
+              <span>⋮</span>
+            </button>
+            <div id="profile-dropdown-menu" class="profile-dropdown-menu" style="display: none;">
+              <div class="dropdown-item" id="menu-view-profile-btn">
+                <span>👁️</span> View Profile
+              </div>
+              <div class="dropdown-item" id="menu-edit-profile-btn">
+                <span>✏️</span> Edit Profile
+              </div>
+              <div class="dropdown-item" id="menu-settings-btn">
+                <span>⚙️</span> Settings &amp; Diagnostics
+              </div>
+              <div class="dropdown-divider"></div>
+              <div class="dropdown-item danger" id="menu-logout-btn">
+                <span>🚪</span> Sign Out
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Search in Sidebar -->
+      <div class="sidebar-search-box">
+        <div class="search-input-shell">
+          <span class="search-icon">🔍</span>
+          <input
+            id="chat-contacts-search"
+            class="sidebar-search-input"
+            type="text"
+            placeholder="Search conversations..."
+            autocomplete="off"
+          >
+          <button id="search-clear-btn" class="search-clear-btn" type="button" style="display: none;">✕</button>
+        </div>
+      </div>
+
+      <!-- Sidebar Tabs Switcher: Direct vs Groups vs Explore -->
+      <div class="sidebar-tabs-nav">
+        <button id="tab-chats-direct" class="sidebar-tab-btn active" type="button">
+          <span>💬 Direct</span>
+        </button>
+        <button id="tab-chats-groups" class="sidebar-tab-btn" type="button">
+          <span>👥 Groups</span>
+        </button>
+        <button id="tab-community-dir" class="sidebar-tab-btn" type="button">
+          <span>🌐 Community</span>
+        </button>
+      </div>
+
+      <!-- Sidebar Scrollable Stream -->
+      <div class="sidebar-content-scroll" id="sidebar-content-scroll">
+        <!-- Direct Contacts List -->
+        <div id="chat-contacts-scroll" class="conversation-items-list">
+          <div style="text-align: center; padding: 2rem 1rem; color: var(--text-dim); font-size: 0.85rem;">
+            Loading direct conversations...
+          </div>
+        </div>
+
+        <!-- Groups List -->
+        <div id="chat-groups-scroll" class="conversation-items-list" style="display: none;">
+          <div style="text-align: center; padding: 2rem 1rem; color: var(--text-dim); font-size: 0.85rem;">
+            Loading group conversations...
+          </div>
+        </div>
+
+        <!-- Community Directory (Explore) -->
+        <div id="community-directory-pane" class="conversation-items-list" style="display: none;">
+          <div style="padding: 0.25rem 0.25rem 0.5rem;">
+            <input id="user-search-input" class="form-input" type="text" placeholder="Search community profiles...">
+          </div>
+          <div id="user-list-container" class="conversation-items-list">
+            <div style="text-align: center; padding: 2rem 1rem; color: var(--text-dim); font-size: 0.85rem;">
+              Sign in to browse directory.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar Footer Bar (Connection Status & Quick Settings) -->
+      <div class="sidebar-footer-bar">
+        <div class="connection-status-pill" id="footer-connection-status">
+          <span class="status-dot-pulse"></span>
+          <span id="footer-connection-text">Real-Time Sync Active</span>
+        </div>
+        <button id="open-settings-shortcut" class="footer-settings-btn" type="button">
+          ⚙️ Settings
+        </button>
+      </div>
+    </aside>
+
+    <!-- ====================================================================
+         RIGHT MAIN CHAT PANE
+         ==================================================================== -->
+    <main class="app-main-pane" id="app-main-pane">
+      <!-- Empty Chat View (No active conversation selected) -->
+      <div id="chat-empty-view" class="chat-empty-fullscreen">
+        <div class="empty-state-card">
+          <div class="empty-hero-icon">💬</div>
+          <h2 class="empty-hero-title">Real-Time Chat Application</h2>
+          <p class="empty-hero-desc">
+            Select a direct conversation from the sidebar or open a group to start messaging in real time.
+          </p>
+          <div class="empty-actions-row">
+            <button id="empty-start-chat-btn" class="btn btn-primary" type="button">
+              <span>💬</span> Start Chat
+            </button>
+            <button id="empty-search-btn" class="btn btn-outline" type="button">
+              <span>🔍</span> Search Messages
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Active Chat View -->
+      <div id="chat-active-view" class="chat-active-fullscreen" style="display: none;">
+        <!-- Chat Header -->
+        <header class="chat-main-header">
+          <div class="header-user-meta">
+            <button id="chat-back-btn" class="chat-mobile-back-btn" title="Back to conversations" type="button">
+              ←
+            </button>
+            <div class="header-avatar-wrap">
+              <div id="chat-header-avatar" class="header-avatar-circle">👤</div>
+              <span id="chat-header-status-dot" class="online-indicator-dot"></span>
+            </div>
+            <div class="header-text-block">
+              <div id="chat-header-username" class="header-contact-name">Conversation</div>
+              <div id="chat-header-status-sub" class="header-contact-status">Online</div>
+            </div>
+          </div>
+
+          <div class="header-actions-group">
+            <button id="in-chat-search-btn" class="icon-btn" title="Search inside conversation" type="button">
+              <span>🔍</span>
+            </button>
+            <button id="chat-group-info-btn" class="icon-btn" title="Group Information" type="button" style="display: none;">
+              <span>ℹ️</span>
+            </button>
+          </div>
+        </header>
+
+        <!-- In-Conversation Search Slide Bar -->
+        <div id="in-chat-search-bar" class="in-chat-search-bar" style="display: none;">
+          <div class="in-chat-search-inner">
+            <span class="search-icon">🔍</span>
+            <input id="in-chat-search-input" class="in-chat-input" type="text" placeholder="Search in this conversation...">
+            <input id="in-chat-search-date" class="in-chat-date" type="date" title="Filter by date">
+            <span id="in-chat-search-count" class="in-chat-count"></span>
+            <button id="in-chat-search-prev-btn" class="in-chat-nav-btn" type="button" disabled>◀</button>
+            <button id="in-chat-search-next-btn" class="in-chat-nav-btn" type="button" disabled>▶</button>
+            <button id="in-chat-search-close-btn" class="in-chat-close-btn" type="button">✕</button>
+          </div>
+        </div>
+
+        <!-- Messages Stream -->
+        <div id="chat-messages-stream" class="messages-stream-pane"></div>
+
+        <!-- Typing Indicator Bubble -->
+        <div id="chat-typing-indicator" class="typing-bubble-container" style="display: none;">
+          <span class="typing-dot"></span>
+          <span class="typing-dot"></span>
+          <span class="typing-dot"></span>
+        </div>
+
+        <!-- Attachment Preview Tray -->
+        <div id="chat-attachment-tray" class="attachment-preview-tray" style="display: none;">
+          <div class="attachment-card-box">
+            <div id="attachment-preview-media" class="attachment-thumb-wrap"></div>
+            <div class="attachment-info-wrap">
+              <div id="attachment-file-name" class="attachment-title">filename.png</div>
+              <div id="attachment-file-size" class="attachment-sub">0 KB</div>
+              <div id="attachment-progress-wrapper" class="attachment-progress-container" style="display: none;">
+                <div class="attachment-track">
+                  <div id="attachment-progress-fill" class="attachment-fill"></div>
+                </div>
+                <span id="attachment-progress-text" class="attachment-pct">0%</span>
+              </div>
+            </div>
+            <button id="attachment-remove-btn" class="attachment-close-btn" type="button" title="Remove attachment">✕</button>
+          </div>
+        </div>
+
+        <!-- Chat Input Bar -->
+        <form id="chat-input-form" class="chat-input-bar">
+          <input
+            id="chat-file-input"
+            type="file"
+            accept=".jpg,.jpeg,.png,.webp,.pdf,.doc,.docx,.txt"
+            style="display: none;"
+          >
+          <button id="chat-attach-btn" class="chat-action-btn" type="button" title="Attach file or photo">
+            📎
+          </button>
+          <input
+            id="chat-message-input"
+            class="chat-main-text-input"
+            type="text"
+            placeholder="Type a message or caption..."
+            autocomplete="off"
+          >
+          <button id="chat-send-btn" class="chat-send-submit-btn" type="submit" title="Send message">
+            <span>➤</span>
+          </button>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <!-- In-App Floating Notification Toast Container -->
+  <div id="notification-toast-container" class="notification-toast-container"></div>
+
+  <!-- ====================================================================
+       MODALS & DIALOGS
+       ==================================================================== -->
+
+  <!-- App Settings & System Diagnostics Modal (Phase 11) -->
+  <div id="settings-modal" class="modal-backdrop" style="display: none;">
+    <div class="modal-window" style="max-width: 600px;">
+      <div class="modal-header">
+        <h3 class="modal-title">⚙️ Settings &amp; Diagnostics</h3>
+        <button id="settings-modal-close-btn" class="modal-close-btn" type="button">&times;</button>
+      </div>
+
+      <!-- Settings Tabs -->
+      <div class="search-tabs-nav" style="margin-bottom: 1.25rem;">
+        <button id="settings-tab-appearance" class="search-tab-btn active" type="button">
+          <span>🎨 Appearance</span>
+        </button>
+        <button id="settings-tab-diagnostics" class="search-tab-btn" type="button">
+          <span>🩺 Diagnostics</span>
+        </button>
+        <button id="settings-tab-account" class="search-tab-btn" type="button">
+          <span>👤 Account</span>
+        </button>
+      </div>
+
+      <!-- Tab 1: Appearance -->
+      <div id="settings-pane-appearance">
+        <div class="form-group">
+          <label>Theme Mode</label>
+          <div style="display: flex; gap: 1rem; margin-top: 0.35rem;">
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.9rem;">
+              <input type="radio" name="theme-choice" id="theme-radio-dark" checked>
+              <span>🌙 Dark Mode</span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.9rem;">
+              <input type="radio" name="theme-choice" id="theme-radio-light">
+              <span>☀️ Light Mode</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-top: 1.25rem;">
+          <label>Audio Notifications</label>
+          <label style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer; font-size: 0.9rem; margin-top: 0.35rem;">
+            <input type="checkbox" id="settings-sound-toggle" checked>
+            <span>Play chime on incoming messages</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Tab 2: System Diagnostics & Health (Phase 1 Preserved) -->
+      <div id="settings-pane-diagnostics" style="display: none;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem; margin-bottom: 1rem;">
+          <!-- Express API -->
+          <div style="background: var(--bg-card); padding: 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+              <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted);">EXPRESS API</span>
+              <span id="server-status-pill" class="status-pill warning">Checking</span>
+            </div>
+            <div id="server-status-text" style="font-size: 0.85rem; font-weight: 600;">Connecting...</div>
+            <div id="server-msg-text" style="font-size: 0.72rem; color: var(--text-dim);">GET /api/health</div>
+          </div>
+
+          <!-- Socket.IO -->
+          <div style="background: var(--bg-card); padding: 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+              <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted);">SOCKET.IO</span>
+              <span id="socket-status-pill" class="status-pill warning">Connecting</span>
+            </div>
+            <div id="socket-status-text" style="font-size: 0.85rem; font-weight: 600;">Initializing...</div>
+            <div id="socket-id-text" style="font-size: 0.72rem; color: var(--text-dim);">Awaiting connection</div>
+          </div>
+
+          <!-- Database -->
+          <div style="background: var(--bg-card); padding: 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+              <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted);">DATABASE</span>
+              <span class="status-pill success">Connected</span>
+            </div>
+            <div style="font-size: 0.85rem; font-weight: 600;">MongoDB 9.0.2</div>
+            <div style="font-size: 0.72rem; color: var(--text-dim);">Mongoose ODM</div>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 0.5rem; margin-bottom: 0.75rem;">
+          <button id="refresh-health-btn" class="btn btn-primary" type="button" style="padding: 0.4rem 0.75rem; font-size: 0.8rem;">
+            <span>🩺</span> Test /api/health
+          </button>
+          <button id="ping-btn" class="btn btn-outline" type="button" style="padding: 0.4rem 0.75rem; font-size: 0.8rem;">
+            <span>⚡</span> Ping Socket Server
+          </button>
+        </div>
+
+        <div style="margin-top: 0.5rem;">
+          <label style="font-size: 0.75rem; font-weight: 700; color: var(--text-dim); text-transform: uppercase;">Real-Time Diagnostics Log</label>
+          <div id="log-container" class="log-box" style="margin-top: 0.35rem; max-height: 140px; font-size: 0.75rem;">[System initialized. Running diagnostics...]&#10;</div>
+        </div>
+      </div>
+
+      <!-- Tab 3: Account -->
+      <div id="settings-pane-account" style="display: none;">
+        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.25rem;">
+          <div id="settings-acc-avatar" style="width: 56px; height: 56px; border-radius: 50%; background: var(--bg-card); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; border: 2px solid var(--accent-color);">
+            👤
+          </div>
+          <div>
+            <h4 id="settings-acc-username" style="font-size: 1.1rem; font-weight: 700;">@User</h4>
+            <p id="settings-acc-email" style="font-size: 0.85rem; color: var(--text-muted);">user@example.com</p>
+            <p id="settings-acc-bio" style="font-size: 0.8rem; color: var(--text-dim); font-style: italic;">Bio</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Global Search Hub Modal (Phase 9 Preserved) -->
+  <div id="search-modal" class="modal-backdrop" style="display: none;">
+    <div class="modal-window search-modal-window">
+      <div class="modal-header">
+        <h3 class="modal-title">🔍 Powerful Search Hub</h3>
+        <button id="search-modal-close-btn" class="modal-close-btn" type="button">&times;</button>
+      </div>
+
+      <div class="search-tabs-nav">
+        <button id="search-tab-messages" class="search-tab-btn active" type="button">
+          <span>💬 Messages</span>
+        </button>
+        <button id="search-tab-users" class="search-tab-btn" type="button">
+          <span>👤 Users</span>
+        </button>
+        <button id="search-tab-groups" class="search-tab-btn" type="button">
+          <span>👥 Groups</span>
+        </button>
+      </div>
+
+      <div class="search-controls-box">
+        <div class="search-input-group">
+          <input
+            id="search-main-input"
+            class="form-input"
+            type="text"
+            placeholder="Search messages by text..."
+            style="flex: 1; padding: 0.55rem 0.85rem; font-size: 0.9rem;"
+            autocomplete="off"
+          >
+          <button id="search-execute-btn" class="btn btn-primary" type="button" style="padding: 0.55rem 1rem;">
+            <span>Search</span>
+          </button>
+        </div>
+
+        <div id="search-msg-filters" class="search-filter-row">
+          <span class="search-filter-label">Conversation:</span>
+          <select id="search-conversation-filter" class="form-input" style="padding: 0.35rem 0.6rem; font-size: 0.8rem; max-width: 170px;">
+            <option value="">All Conversations</option>
+          </select>
+
+          <span class="search-filter-label" style="margin-left: 0.25rem;">From:</span>
+          <input id="search-start-date" class="form-input" type="date" title="Start date" style="padding: 0.35rem 0.5rem; font-size: 0.8rem; width: 125px;">
+
+          <span class="search-filter-label">To:</span>
+          <input id="search-end-date" class="form-input" type="date" title="End date" style="padding: 0.35rem 0.5rem; font-size: 0.8rem; width: 125px;">
+
+          <button id="search-reset-filters-btn" class="btn btn-outline" type="button" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" title="Reset filters">
+            Reset
+          </button>
+        </div>
+      </div>
+
+      <div id="search-results-list" class="search-results-container">
+        <div class="search-results-empty">
+          Type a query above and hit Search to find messages across your chats.
+        </div>
+      </div>
+
+      <div id="search-pagination-bar" class="search-pagination-bar" style="display: none;">
+        <button id="search-prev-btn" class="btn btn-outline search-page-btn" type="button" disabled>◀ Previous</button>
+        <span id="search-page-indicator">Page 1 of 1 (0 total)</span>
+        <button id="search-next-btn" class="btn btn-outline search-page-btn" type="button" disabled>Next ▶</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Message Confirmation Modal (Phase 10 Preserved) -->
+  <div id="delete-message-modal" class="modal-backdrop" style="display: none;">
+    <div class="modal-window delete-modal-window">
+      <div class="modal-header">
+        <h3 class="modal-title">Delete message?</h3>
+        <button id="delete-modal-close-btn" class="modal-close-btn" type="button">&times;</button>
+      </div>
+
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.25rem;">
+        Are you sure you want to delete this message?
+      </p>
+
+      <div style="display: flex; flex-direction: column; gap: 0.65rem;">
+        <button id="delete-for-everyone-btn" class="btn btn-primary" type="button" style="background: #ef4444; color: white;">
+          <span>🗑️</span> Delete for everyone
+        </button>
+        <button id="delete-for-me-btn" class="btn btn-outline" type="button">
+          Delete for me
+        </button>
+        <button id="delete-cancel-btn" class="btn btn-outline" type="button" style="color: var(--text-dim);">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create Group Modal (Phase 6 Preserved) -->
+  <div id="create-group-modal" class="modal-backdrop" style="display: none;">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3 class="modal-title">Create New Group</h3>
+        <button class="modal-close-btn" type="button">&times;</button>
+      </div>
+
+      <div id="create-group-alert" class="auth-alert" style="display: none;"></div>
+
+      <form id="create-group-form" class="auth-form">
+        <div class="form-group">
+          <label>Choose Group Icon</label>
+          <div class="avatar-selector-grid">
+            <button class="avatar-option-btn group-avatar-opt-btn selected" type="button" data-avatar="👥">👥</button>
+            <button class="avatar-option-btn group-avatar-opt-btn" type="button" data-avatar="🚀">🚀</button>
+            <button class="avatar-option-btn group-avatar-opt-btn" type="button" data-avatar="💡">💡</button>
+            <button class="avatar-option-btn group-avatar-opt-btn" type="button" data-avatar="🎮">🎮</button>
+            <button class="avatar-option-btn group-avatar-opt-btn" type="button" data-avatar="🍕">🍕</button>
+            <button class="avatar-option-btn group-avatar-opt-btn" type="button" data-avatar="🏆">🏆</button>
+            <button class="avatar-option-btn group-avatar-opt-btn" type="button" data-avatar="🔥">🔥</button>
+            <button class="avatar-option-btn group-avatar-opt-btn" type="button" data-avatar="💻">💻</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="create-group-name">Group Name</label>
+          <input id="create-group-name" class="form-input" type="text" placeholder="e.g. Project Team" required minlength="3" maxlength="50">
+        </div>
+
+        <div class="form-group">
+          <label for="create-group-desc">Description (optional)</label>
+          <input id="create-group-desc" class="form-input" type="text" placeholder="What is this group about?" maxlength="200">
+        </div>
+
+        <div class="form-group">
+          <label>Select Members</label>
+          <div id="group-members-checkbox-list" style="max-height: 140px; overflow-y: auto; background: var(--bg-input); padding: 0.5rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+            <div style="color: var(--text-dim); font-size: 0.85rem;">No contacts loaded.</div>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 0.75rem; margin-top: 0.5rem;">
+          <button type="button" class="btn btn-outline modal-cancel-btn" style="flex: 1;">Cancel</button>
+          <button type="submit" class="btn btn-primary" style="flex: 1;">Create Group</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Group Info & Manage Modal (Phase 6 Preserved) -->
+  <div id="group-info-modal" class="modal-backdrop" style="display: none;">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3 class="modal-title">Group Information</h3>
+        <button class="modal-close-btn" type="button">&times;</button>
+      </div>
+
+      <div class="profile-detail-card" style="padding-bottom: 0;">
+        <div id="group-info-avatar" class="profile-detail-avatar">👥</div>
+        <h3 id="group-info-name" style="font-size: 1.3rem; font-weight: 700;">Group Name</h3>
+        <p id="group-info-desc" style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.35rem;">Description</p>
+      </div>
+
+      <div style="margin-top: 1.25rem;">
+        <h4 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 0.5rem;">Group Members</h4>
+        <div id="group-info-members-list" style="max-height: 160px; overflow-y: auto; background: var(--bg-input); padding: 0.65rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 0.25rem;">
+        </div>
+      </div>
+
+      <div id="group-add-member-container" style="margin-top: 1rem; display: none;">
+        <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 0.35rem;">Add Member</label>
+        <div style="display: flex; gap: 0.5rem;">
+          <select id="group-add-member-select" class="form-input" style="flex: 1; padding: 0.5rem;"></select>
+          <button id="group-add-member-btn" type="button" class="btn btn-primary" style="padding: 0.5rem 0.85rem; font-size: 0.85rem;">Add</button>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 0.75rem; margin-top: 1.5rem;">
+        <button id="group-leave-btn" type="button" class="btn btn-outline" style="flex: 1; border-color: #ef4444; color: #ef4444;">
+          Leave Group
+        </button>
+        <button type="button" class="btn btn-outline modal-cancel-btn" style="flex: 1;">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Profile Modal (Phase 3 Preserved) -->
+  <div id="edit-profile-modal" class="modal-backdrop" style="display: none;">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3 class="modal-title">Edit Profile</h3>
+        <button class="modal-close-btn" type="button">&times;</button>
+      </div>
+
+      <div id="edit-profile-alert" class="auth-alert" style="display: none;"></div>
+
+      <form id="edit-profile-form" class="auth-form">
+        <div class="form-group">
+          <label>Choose Avatar Icon</label>
+          <div class="avatar-selector-grid">
+            <button class="avatar-option-btn selected" type="button" data-avatar="👤">👤</button>
+            <button class="avatar-option-btn" type="button" data-avatar="🐱">🐱</button>
+            <button class="avatar-option-btn" type="button" data-avatar="🦊">🦊</button>
+            <button class="avatar-option-btn" type="button" data-avatar="🐼">🐼</button>
+            <button class="avatar-option-btn" type="button" data-avatar="🚀">🚀</button>
+            <button class="avatar-option-btn" type="button" data-avatar="💎">💎</button>
+            <button class="avatar-option-btn" type="button" data-avatar="⚡">⚡</button>
+            <button class="avatar-option-btn" type="button" data-avatar="🌟">🌟</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="edit-username">Username</label>
+          <input id="edit-username" class="form-input" type="text" required minlength="3" maxlength="30">
+        </div>
+
+        <div class="form-group">
+          <label for="edit-bio">Status / Bio (max 120 characters)</label>
+          <input id="edit-bio" class="form-input" type="text" maxlength="120" placeholder="Tell everyone about yourself...">
+        </div>
+
+        <div style="display: flex; gap: 0.75rem; margin-top: 0.5rem;">
+          <button type="button" class="btn btn-outline modal-cancel-btn" style="flex: 1;">Cancel</button>
+          <button type="submit" class="btn btn-primary" style="flex: 1;">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- View Profile Modal (Phase 3 Preserved) -->
+  <div id="view-profile-modal" class="modal-backdrop" style="display: none;">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3 class="modal-title">User Profile</h3>
+        <button class="modal-close-btn" type="button">&times;</button>
+      </div>
+
+      <div class="profile-detail-card">
+        <div id="view-profile-avatar" class="profile-detail-avatar">👤</div>
+        <h3 id="view-profile-username" style="font-size: 1.35rem; font-weight: 700;">@username</h3>
+        <p id="view-profile-bio" style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.35rem;">Status Bio</p>
+
+        <div class="profile-meta-list">
+          <div class="profile-meta-item">
+            <span class="profile-meta-label">Email Address</span>
+            <span id="view-profile-email" class="profile-meta-val">email@example.com</span>
+          </div>
+          <div class="profile-meta-item">
+            <span class="profile-meta-label">Status</span>
+            <span id="view-profile-status" class="profile-meta-val" style="color: #10b981;">Online</span>
+          </div>
+          <div class="profile-meta-item">
+            <span class="profile-meta-label">Last Seen</span>
+            <span id="view-profile-last-seen" class="profile-meta-val">Online</span>
+          </div>
+          <div class="profile-meta-item">
+            <span class="profile-meta-label">Member Since</span>
+            <span id="view-profile-joined" class="profile-meta-val">Oct 7, 2026</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 1.25rem;">
+        <button type="button" class="btn btn-outline modal-cancel-btn" style="width: 100%;">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Image Lightbox Modal (Phase 7 Preserved) -->
+  <div id="image-lightbox-modal" class="modal-backdrop" style="display: none;">
+    <div class="modal-window lightbox-modal-window" style="max-width: 800px; padding: 1rem;">
+      <div class="modal-header" style="margin-bottom: 0.75rem;">
+        <h3 id="lightbox-filename" class="modal-title" style="font-size: 1rem; font-weight: 600; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; max-width: 85%;">Image Preview</h3>
+        <button id="lightbox-close-btn" class="modal-close-btn" type="button">&times;</button>
+      </div>
+      <div style="display: flex; justify-content: center; align-items: center; background: #000; border-radius: 8px; overflow: hidden; max-height: 70vh;">
+        <img id="lightbox-img" src="" alt="Preview" style="max-width: 100%; max-height: 70vh; object-fit: contain;">
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.75rem;">
+        <span id="lightbox-meta-size" style="font-size: 0.85rem; color: var(--text-dim);"></span>
+        <a id="lightbox-download-link" href="#" class="btn btn-primary" download style="padding: 0.4rem 1rem; font-size: 0.85rem;">
+          ⬇️ Download
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Compatibility DOM Anchors for App & Profile Controllers -->
+  <div style="display: none;" id="compat-hidden-anchors">
+    <div id="chat-layout-container"></div>
+    <div id="user-profile-card">
+      <div id="unauthenticated-view"></div>
+      <div id="authenticated-view"></div>
+      <span id="auth-status-badge"></span>
+      <div id="profile-avatar-display"></div>
+      <h3 id="profile-username-display"></h3>
+      <p id="profile-email-display"></p>
+      <p id="profile-bio-display"></p>
+      <button id="logout-btn"></button>
+      <button id="view-my-profile-btn"></button>
+      <button id="edit-profile-btn"></button>
+    </div>
+    <span id="user-count-badge"></span>
+  </div>
+
+  <!-- Scripts -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/config.js"></script>
+  <script src="/js/services/api.service.js"></script>
+  <script src="/js/utils/date-formatter.js"></script>
+  <script src="/js/components/theme.controller.js"></script>
+  <script src="/js/components/profile.controller.js"></script>
+  <script src="/js/components/chat.controller.js"></script>
+  <script src="/js/components/group.controller.js"></script>
+  <script src="/js/components/notification.controller.js"></script>
+  <script src="/js/components/search.controller.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>
