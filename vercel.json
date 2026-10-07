@@ -1,11 +1,37 @@
 {
-  "version": 2,
-  "outputDirectory": "client",
-  "cleanUrls": true,
+  "$schema": "https://openapi.vercel.sh/vercel.json",
   "rewrites": [
     {
+      "source": "/api/:match*",
+      "destination": "/api"
+    },
+    {
       "source": "/auth",
-      "destination": "/auth.html"
+      "destination": "/client/auth.html"
+    },
+    {
+      "source": "/auth.html",
+      "destination": "/client/auth.html"
+    },
+    {
+      "source": "/css/:match*",
+      "destination": "/client/css/:match*"
+    },
+    {
+      "source": "/js/:match*",
+      "destination": "/client/js/:match*"
+    },
+    {
+      "source": "/assets/:match*",
+      "destination": "/client/assets/:match*"
+    },
+    {
+      "source": "/",
+      "destination": "/client/index.html"
+    },
+    {
+      "source": "/index.html",
+      "destination": "/client/index.html"
     }
   ]
 }
