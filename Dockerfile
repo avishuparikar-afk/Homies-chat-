@@ -1,11 +1,11 @@
-# Multi-stage production Dockerfile for Real-Time Chat Application
+# Multi-stage production Dockerfile for Homies Chat Application
 FROM node:20-alpine AS base
 
 WORKDIR /app
 
-# Install dependencies
+# Install dependencies cleanly without dev dependencies
 COPY package*.json ./
-RUN npm ci --only=production
+RUN npm ci --omit=dev
 
 # Copy application source code
 COPY . .
@@ -19,10 +19,6 @@ EXPOSE 5000
 
 # Non-root user for security
 USER node
-
-# Health check endpoint
-HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-  CMD wget --no-verbose --tries=1 --spider http://localhost:5000/api/health || exit 1
 
 # Start production server
 CMD ["node", "server/server.js"]

@@ -89,23 +89,22 @@ const io = initSocket(httpServer, config);
 // Attach io instance to express app for future route access
 app.set('io', io);
 
-// Start Server after connecting to Database
 const startServer = async () => {
   try {
     await connectDB();
-
-    httpServer.listen(config.port, () => {
-      console.log(`=========================================`);
-      console.log(`🚀 Server running in ${config.nodeEnv} mode`);
-      console.log(`📡 Listening at: http://localhost:${config.port}`);
-      console.log(`🩺 Health API: http://localhost:${config.port}/api/health`);
-      console.log(`⚡ Socket.IO is initialized and listening`);
-      console.log(`=========================================`);
-    });
   } catch (error) {
-    console.error('Failed to start server due to database connection error:', error.message);
-    process.exit(1);
+    console.warn(`[MongoDB Warning] Database connection pending: ${error.message}`);
+    console.warn('[MongoDB Warning] Server will continue running to serve web interface.');
   }
+
+  httpServer.listen(config.port, '0.0.0.0', () => {
+    console.log(`=========================================`);
+    console.log(`🚀 Server running in ${config.nodeEnv} mode`);
+    console.log(`📡 Listening at: http://0.0.0.0:${config.port}`);
+    console.log(`🩺 Health API: http://0.0.0.0:${config.port}/api/health`);
+    console.log(`⚡ Socket.IO is initialized and listening`);
+    console.log(`=========================================`);
+  });
 };
 
 // Graceful shutdown

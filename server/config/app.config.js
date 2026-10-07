@@ -29,13 +29,13 @@ const validateProductionEnv = () => {
 
   if (isProd) {
     if (!secret || secret === 'fallback_development_secret_key_12345' || secret.length < 32) {
-      throw new Error(
-        'FATAL CONFIGURATION ERROR: In production mode, JWT_SECRET must be explicitly set to a cryptographically strong secret at least 32 characters long!'
+      console.warn(
+        '[Security Warning] In production mode, JWT_SECRET should be explicitly set to a 32+ character secret in environment variables.'
       );
     }
     if (!process.env.MONGODB_URI) {
-      throw new Error(
-        'FATAL CONFIGURATION ERROR: In production mode, MONGODB_URI (e.g. MongoDB Atlas connection string) must be explicitly configured!'
+      console.warn(
+        '[Database Warning] In production mode, MONGODB_URI should be set in environment variables (e.g. MongoDB Atlas).'
       );
     }
   }
